@@ -9,7 +9,7 @@ public class NodeMinHeap<T>
 {
 	private Node<T>[] minHeap;
 	private int position; //next empty spot in array
-	
+
 	public NodeMinHeap(int size)
 	{
 		//Initialize size of array
@@ -21,7 +21,7 @@ public class NodeMinHeap<T>
 	{
 		return minHeap[1];
 	}
-	
+
 
 	public void insert(Node<T> element)
 	{
@@ -30,15 +30,15 @@ public class NodeMinHeap<T>
 		{
 			expandCapacity();
 		}
-		
+
 		//if the array is empty
 		if(position == 1)
 		{
 			minHeap[position] = element;
 			position++;
 		}
-		
-		//insert at the last position in array
+
+		//insert at the last open position in array
 		else
 		{
 			minHeap[position] = element;
@@ -54,10 +54,10 @@ public class NodeMinHeap<T>
 	{
 		//this gets the last element in the array
 		int pos = position - 1;
-		
+
 		//do this while the length of path is less than its parent and not the root
 		//while(pos > 0 && (minHeap[pos/2].getLengthOfPath() > minHeap[pos].getLengthOfPath()))
-		
+
 		while(pos > 1 && (minHeap[pos/2].compareTo(minHeap[pos]) >= 0))
 		{
 			//store the last thing in the array
@@ -71,7 +71,7 @@ public class NodeMinHeap<T>
 			pos = pos/2;
 		}
 	}
-	
+
 	public void expandCapacity()
 	{
 		Node<T>[] larger = new Node[minHeap.length * 2];
@@ -92,17 +92,25 @@ public class NodeMinHeap<T>
 	//this is used for the final distance array
 	public Node extractMin()
 	{
+		if(isEmpty())
+		{
+			throw new IllegalStateException("No nodes in MinHeap");
+		}
 
-		//store root 
-		Node min = minHeap[1];
-		//put last item in array in front
-		minHeap[1] = minHeap[position-1];
-		//set last position in array to null
-		minHeap[position - 1] = null;
-		position--;
-		percolateDown(1);
-		
-		return min;
+		else
+		{
+			//store root 
+			Node min = minHeap[1];
+			//put last item in array in front
+			minHeap[1] = minHeap[position-1];
+			//set last position in array to null
+			minHeap[position - 1] = null;
+			position--;
+			percolateDown(1);
+
+			return min;
+		}
+
 	}
 
 	//replace node with a smaller node 
@@ -129,34 +137,34 @@ public class NodeMinHeap<T>
 	public void percolateDown(int emptySpot)
 	{
 		//store the dist where the percolate begins, (usually index 1 root of the array)
-		int temp = minHeap[emptySpot].getLengthOfPath();
-		
+		//int temp = minHeap[emptySpot].getLengthOfPath();
+
 		int smallest = emptySpot; 
-		
+
 		//checks left child 
 		if(2 * emptySpot < position && minHeap[smallest].getLengthOfPath() > minHeap[2 * emptySpot].getLengthOfPath())
 		{
 			smallest = 2 * emptySpot;
 		}
-		
+
 		//checks right child
 		if(2 * emptySpot + 1 < position && minHeap[smallest].getLengthOfPath() > minHeap[2 * emptySpot + 1].getLengthOfPath())
 		{
 			smallest = 2 * emptySpot + 1;
 		}
-		
+
 		if(smallest != emptySpot)
 		{
 			swap(emptySpot, smallest);
 			percolateDown(smallest);
 		}
 	}
-	
+
 	public boolean isEmpty()
 	{
 		return (position == 0);
 	}
-	
+
 	//swapping nodes at these 2 given indexes
 	public void swap(int a, int b)
 	{
@@ -164,19 +172,27 @@ public class NodeMinHeap<T>
 		minHeap[a] = minHeap[b];
 		minHeap[b] = temp;
 	}
-	
-	
+
+
 	@Override
 	public String toString()
 	{
-		String result = "Min heap: " ;
-		
-		for(int i = 1; i < minHeap.length; i++)
+		String result = " ";
+
+		if(isEmpty())
 		{
-			result += minHeap[i].getLengthOfPath() + " ";
+			System.out.println("EMPTYYYY");
+			throw new IllegalStateException("Empty minHeap");
 		}
-		
-		return result;
+
+		else
+		{
+			for(int i = 1; i < minHeap.length; i++)
+			{
+				result += "Node: " + minHeap[i].getId() + " Path Length: " + minHeap[i].getLengthOfPath() + " \n";
+			}
+			return result;
+		}
 	}
 
 }
