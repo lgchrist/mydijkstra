@@ -22,6 +22,21 @@ public class NodeMinHeap<T>
 		return minHeap[1];
 	}
 
+	public Node<T> getNode(int i)
+	{
+		return minHeap[i];
+	}
+	
+	//will return the index of the node in the minHeap by the node's ID
+	public int getIndex(int i)
+	{
+		int index = 1;
+		while(minHeap[index].getId() != i)
+		{
+			index++;
+		}
+		return index;
+	}
 
 	public void insert(Node<T> element)
 	{
@@ -110,26 +125,54 @@ public class NodeMinHeap<T>
 
 			return min;
 		}
-
 	}
 
 	//replace node with a smaller node 
 	//is this just updating the node's distance and then percolating up if needed?
 	//not making a new node... 
-	public void decreaseKey(int index, Node newVal)
-	{
-		//set the new value in the array
-		minHeap[index] = newVal;
+	//index of the node you are moving
 
+	public void decreaseKey(int index)
+	{
+		Node temp = minHeap[index];
+		//so while still traversing the array and the new value is less than its parent 
+		//if less than parent, needs to move up
+		while(index > 1 && (temp.getLengthOfPath() < minHeap[index/2].getLengthOfPath())) 
+		{
+			//swapping for parent if the element to be switched is less than parent
+			minHeap[index] = minHeap[index/2];
+			minHeap[index/2] = temp;
+			index /= 2;
+
+			if(index == 1)
+			{
+				minHeap[index] = temp;
+			}
+		}
+		minHeap[index] = temp;
+	}
+
+
+	public void decreaseKey(int index, int newVal)
+	{
+		Node temp = minHeap[index];
 		//percolate up if needed
 		//so while still traversing the array and the new value is less than its parent 
 		//if less than parent, needs to move up
-		while(minHeap.length > 0 && newVal.getLengthOfPath()  < minHeap[index/2].getLengthOfPath()) 
+		while(minHeap.length > 0 && (newVal < minHeap[index/2].getLengthOfPath())) 
 		{
-			//swapping for parent if the element to be added is less than parent
+			//swapping for parent if the element to be switched is less than parent
 			minHeap[index] = minHeap[index/2];
+			minHeap[index/2] = temp;
 			index /= 2;
+
+			if(index == 1)
+			{
+				minHeap[index].setLengthOfPath(newVal);
+			}
 		}
+
+		minHeap[index].setLengthOfPath(newVal);
 	}
 
 	//percolate down in the heap, 
@@ -142,13 +185,13 @@ public class NodeMinHeap<T>
 		int smallest = emptySpot; 
 
 		//checks left child 
-		if(2 * emptySpot < position && minHeap[smallest].getLengthOfPath() > minHeap[2 * emptySpot].getLengthOfPath())
+		if((2 * emptySpot < position) && (minHeap[smallest].getLengthOfPath() > minHeap[2 * emptySpot].getLengthOfPath()))
 		{
 			smallest = 2 * emptySpot;
 		}
 
 		//checks right child
-		if(2 * emptySpot + 1 < position && minHeap[smallest].getLengthOfPath() > minHeap[2 * emptySpot + 1].getLengthOfPath())
+		if((2 * emptySpot + 1 < position) && (minHeap[smallest].getLengthOfPath() > minHeap[2 * emptySpot + 1].getLengthOfPath()))
 		{
 			smallest = 2 * emptySpot + 1;
 		}
@@ -177,7 +220,7 @@ public class NodeMinHeap<T>
 	@Override
 	public String toString()
 	{
-		String result = " ";
+		String result = "";
 
 		if(isEmpty())
 		{

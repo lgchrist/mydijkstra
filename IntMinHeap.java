@@ -103,9 +103,10 @@ public class IntMinHeap
 	public void decreaseKey(int index, int newVal)
 	{
 		//set the new value in the array
-		minHeap[index] = newVal;
-
-		//percolate up if needed
+		System.out.println("Index: " + index);
+		System.out.println("newVal: " + newVal);
+		
+		
 		//so while still traversing the array and the new value is less than its parent 
 		//if less than parent, needs to move up
 		while(minHeap.length > 0 && newVal < minHeap[index/2]) 
@@ -113,7 +114,13 @@ public class IntMinHeap
 			//swapping for parent if the element to be added is less than parent
 			minHeap[index] = minHeap[index/2];
 			index /= 2;
+			
+			if(index == 1)
+			{
+				minHeap[index] = newVal;
+			}
 		}
+		minHeap[index] = newVal;
 	}
 
 	//percolate down in the heap, 
