@@ -53,7 +53,7 @@ public class Dijkstra<T>
 	//
 	//find distances for all vertices being the source node
 	//
-	public void excecuteAll()
+	public void executeAll()
 	{
 		for(int i = 0; i < DG.getVertices().size(); i++)
 		{
@@ -89,15 +89,15 @@ public class Dijkstra<T>
 	public void relax()
 	{
 		System.out.println("-------RELAX NODE-------\n");
-		if(DG.getOutEdgeNodes(currentNode.getId()).size() == 0)
-		{
-			System.out.println("No out edges.");
-
-		}
-		else
-		{
-			outEdgeNodes = DG.getOutEdgeNodes(currentNode.getId());
-		}
+//		if(DG.getOutEdgeNodes(currentNode.getId()).size() == 0)
+//		{
+//			System.out.println("No out edges.");
+//
+//		}
+//		else
+//		{
+//			outEdgeNodes = DG.getOutEdgeNodes(currentNode.getId());
+//		}
 
 		for(int i = 0; i < currentNode.outEdges.size(); i++)
 		{
